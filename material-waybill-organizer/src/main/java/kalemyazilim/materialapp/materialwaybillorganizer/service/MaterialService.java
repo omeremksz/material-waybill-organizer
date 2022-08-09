@@ -28,6 +28,7 @@ public class MaterialService {
     }
 
     public MaterialModel saveMaterialModel(MaterialModel materialModel){
+        materialModel.setCreateDate(new Date());
         materialRepo.save(materialModel);
         for (MaterialBarcodeModel materialBarcode : materialModel.getMaterialBarcodes()) {
             materialBarcode.setMaterialModel(materialModel);

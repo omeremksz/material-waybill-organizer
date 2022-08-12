@@ -14,4 +14,6 @@ public interface RayonRepo extends JpaRepository<RayonModel, Long> {
 
     @Query("SELECT r FROM RayonModel r WHERE r.Id = ?1")
     RayonModel getRayonById(Long rayonId);
+
+    Integer countByCode(String code);
 }

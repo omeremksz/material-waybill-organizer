@@ -11,4 +11,6 @@ import java.util.List;
 public interface MaterialRepo extends JpaRepository<MaterialModel, Long> {
     @Query("SELECT m FROM MaterialModel m WHERE m.Id = ?1")
     List<MaterialModel> getMaterialById(Long materialId);
+
+    Integer countByCode(String code);
 }

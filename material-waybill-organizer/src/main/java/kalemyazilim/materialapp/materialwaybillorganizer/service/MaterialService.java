@@ -33,6 +33,9 @@ public class MaterialService {
     }
 
     public MaterialModel saveMaterial(MaterialModel materialModel){
+        if (materialRepo.countByCode(materialModel.getCode()) > 0) {
+            throw new IllegalStateException("There is already a material with same code.");
+        }
         materialModel.setBrand(brandRepo.getBrandById(materialModel.getBrand().getId()));
         materialModel.setRayon(rayonRepo.getRayonById(materialModel.getRayon().getId()));
         materialModel.setCreateDate(new Date());
@@ -58,6 +61,19 @@ public class MaterialService {
         materialModel.setUpdateDate(new Date());
         materialModel.setBrand(brandRepo.getBrandById(updatedMaterialModel.getBrand().getId()));
         materialModel.setRayon(rayonRepo.getRayonById(updatedMaterialModel.getRayon().getId()));
+
+//        Map<Long, Date> temp = new HashMap<Long, Date>();
+//        for (MaterialBarcodeModel materialBarcode : materialModel.getMaterialBarcodes()) {
+//            temp.put(materialBarcode.getId(), materialBarcode.getCreateDate());
+//        }
+//        for (MaterialBarcodeModel updatedMaterialBarcode : updatedMaterialModel.getMaterialBarcodes()) {
+//            for (Map.Entry<Long, Date> i : temp.entrySet()) {
+//                if(i.getKey()==updatedMaterialBarcode.getId()){
+//                    updatedMaterialBarcode.setCreateDate(i.getValue());
+//                }
+//            }
+//        }
+
 
         materialBarcodeRepo.deleteAll();
         materialModel.setMaterialBarcodes(updatedMaterialModel.getMaterialBarcodes());

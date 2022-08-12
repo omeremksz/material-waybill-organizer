@@ -22,6 +22,9 @@ public class RayonService {
     }
 
     public RayonModel saveRayon(RayonModel rayonModel) {
+        if (rayonRepo.countByCode(rayonModel.getCode()) > 0) {
+            throw new IllegalStateException("There is already a rayon with same code.");
+        }
         rayonModel.setCreateDate(new Date());
         return rayonRepo.save(rayonModel);
     }

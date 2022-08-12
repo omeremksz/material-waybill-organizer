@@ -24,6 +24,9 @@ public class BrandService {
     }
 
     public BrandModel saveBrand(BrandModel brandModel) {
+        if (brandRepo.countByCode(brandModel.getCode()) > 0) {
+            throw new IllegalStateException("There is already a brand with same code.");
+        }
         brandModel.setCreateDate(new Date());
         return brandRepo.save(brandModel);
     }

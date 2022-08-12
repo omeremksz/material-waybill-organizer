@@ -16,4 +16,6 @@ public interface BrandRepo extends JpaRepository<BrandModel, Long> {
 
     @Query("SELECT b FROM BrandModel b WHERE b.Id = ?1")
     BrandModel getBrandById(Long brandId);
+
+    Integer countByCode(String code);
 }

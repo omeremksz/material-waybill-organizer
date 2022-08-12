@@ -14,27 +14,27 @@ public class MaterialController {
     MaterialService materialService;
 
     @GetMapping(value = "/list")
-    public List<MaterialModel>getMaterialModel(){
+    public List<MaterialModel>getMaterials(){
         return materialService.getAll();
     }
 
     @GetMapping(value = "/list/{materialId}")
-    public List<MaterialModel> getMaterialByMaterialId(@PathVariable("materialId") Long materialId){
-        return materialService.getMaterialByMaterialId(materialId);
+    public List<MaterialModel> getMaterialById(@PathVariable("materialId") Long materialId){
+        return materialService.getMaterialById(materialId);
     }
 
     @PostMapping(value = "/save")
-    public MaterialModel saveMaterialModel(@RequestBody MaterialModel materialModel){
-        return materialService.saveMaterialModel(materialModel);
+    public MaterialModel saveMaterial(@RequestBody MaterialModel materialModel){
+        return materialService.saveMaterial(materialModel);
     }
 
     @DeleteMapping(path = "/delete/{materialId}")
     public void deleteMaterial(@PathVariable("materialId") Long materialId) {
-        materialService.deleteFile(materialId);
+        materialService.deleteMaterial(materialId);
     }
 
     @PutMapping(path = "/update/{materialId}")
-    public void updateMaterial(@PathVariable("materialId") Long materialId, @RequestBody MaterialModel updatedMaterialModel){
-        materialService.updateMaterialModel(materialId, updatedMaterialModel);
+    public void updateMaterial(@PathVariable("materialId") Long materialId, @RequestBody MaterialModel materialModel){
+        materialService.updateMaterial(materialId, materialModel);
     }
 }

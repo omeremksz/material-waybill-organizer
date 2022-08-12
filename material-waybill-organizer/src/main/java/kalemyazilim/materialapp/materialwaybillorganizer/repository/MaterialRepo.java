@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface MaterialRepo extends JpaRepository<MaterialModel, Long> {
     @Query("SELECT m FROM MaterialModel m WHERE m.Id = ?1")
-    List<MaterialModel> getMaterialsById(Long materialId);
+    List<MaterialModel> getMaterialById(Long materialId);
 }

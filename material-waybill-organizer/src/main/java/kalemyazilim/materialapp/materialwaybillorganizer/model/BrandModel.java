@@ -2,6 +2,8 @@ package kalemyazilim.materialapp.materialwaybillorganizer.model;
 
 import kalemyazilim.materialapp.materialwaybillorganizer.base.EntityAbstractClass;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -11,6 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 @Entity
+@DynamicUpdate
 @Table(name = "brand_table")
 public class BrandModel extends EntityAbstractClass {
     @Column(name = "code", length = 20)

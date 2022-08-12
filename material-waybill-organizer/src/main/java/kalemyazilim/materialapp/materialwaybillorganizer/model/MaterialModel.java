@@ -2,6 +2,7 @@ package kalemyazilim.materialapp.materialwaybillorganizer.model;
 
 import kalemyazilim.materialapp.materialwaybillorganizer.base.EntityAbstractClass;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -13,6 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 @Entity
+@DynamicUpdate
 @Table(name = "material_table")
 public class MaterialModel extends EntityAbstractClass {
     @Column(name = "code", length = 20)

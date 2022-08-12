@@ -2,8 +2,10 @@ package kalemyazilim.materialapp.materialwaybillorganizer.service;
 
 import kalemyazilim.materialapp.materialwaybillorganizer.model.MaterialBarcodeModel;
 import kalemyazilim.materialapp.materialwaybillorganizer.model.MaterialModel;
+import kalemyazilim.materialapp.materialwaybillorganizer.repository.BrandRepo;
 import kalemyazilim.materialapp.materialwaybillorganizer.repository.MaterialBarcodeRepo;
 import kalemyazilim.materialapp.materialwaybillorganizer.repository.MaterialRepo;
+import kalemyazilim.materialapp.materialwaybillorganizer.repository.RayonRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,45 +17,55 @@ import java.util.List;
 public class MaterialService {
     @Autowired
     MaterialRepo materialRepo;
-
     @Autowired
     MaterialBarcodeRepo materialBarcodeRepo;
+    @Autowired
+    BrandRepo brandRepo;
+    @Autowired
+    RayonRepo rayonRepo;
 
     public List<MaterialModel> getAll() {
         return materialRepo.findAll();
     }
 
-    public List<MaterialModel> getMaterialByMaterialId(Long materialId) {
-        return materialRepo.getMaterialsById(materialId);
+    public List<MaterialModel> getMaterialById(Long materialId) {
+        return materialRepo.getMaterialById(materialId);
     }
 
-    public MaterialModel saveMaterialModel(MaterialModel materialModel){
+    public MaterialModel saveMaterial(MaterialModel materialModel){
+        materialModel.setBrand(brandRepo.getBrandById(materialModel.getBrand().getId()));
+        materialModel.setRayon(rayonRepo.getRayonById(materialModel.getRayon().getId()));
         materialModel.setCreateDate(new Date());
         materialRepo.save(materialModel);
         for (MaterialBarcodeModel materialBarcode : materialModel.getMaterialBarcodes()) {
             materialBarcode.setMaterialModel(materialModel);
+            materialBarcode.setCreateDate(new Date());
             materialBarcodeRepo.save(materialBarcode);
         }
         return materialModel;
     }
 
-    public void deleteFile(Long materialId) {
+    public void deleteMaterial(Long materialId) {
         boolean isMaterialExists = materialRepo.existsById(materialId);
         if (!isMaterialExists) {
-            throw new IllegalStateException("File with id " + materialId + " does not exists.");
+            throw new IllegalStateException("Material with id " + materialId + " does not exists.");
         }
         materialRepo.deleteById(materialId);
     }
     @Transactional
-    public void updateMaterialModel(Long materialId, MaterialModel updatedMaterialModel) {
-        MaterialModel materialModel = materialRepo.findById(materialId).orElseThrow(() -> new IllegalStateException("Material not found for this id :: " + materialId));
-        //BeanUtils.copyProperties(updatedMaterialModel, materialModel);
+    public void updateMaterial(Long materialId, MaterialModel updatedMaterialModel) {
+        MaterialModel materialModel = materialRepo.findById(materialId).orElseThrow(() -> new IllegalStateException("Material not found for this id: " + materialId));
         materialModel.setUpdateDate(new Date());
-        materialModel.setCode(updatedMaterialModel.getCode());
-        materialModel.setDescription(updatedMaterialModel.getDescription());
-        materialModel.setBrand(updatedMaterialModel.getBrand());
-        materialModel.setRayon(updatedMaterialModel.getRayon());
+        materialModel.setBrand(brandRepo.getBrandById(updatedMaterialModel.getBrand().getId()));
+        materialModel.setRayon(rayonRepo.getRayonById(updatedMaterialModel.getRayon().getId()));
+
+        materialBarcodeRepo.deleteAll();
         materialModel.setMaterialBarcodes(updatedMaterialModel.getMaterialBarcodes());
+        for (MaterialBarcodeModel materialBarcode : materialModel.getMaterialBarcodes()) {
+            materialBarcode.setMaterialModel(materialModel);
+            materialBarcode.setUpdateDate(new Date());
+            materialBarcodeRepo.save(materialBarcode);
+        }
         materialRepo.save(materialModel);
     }
 }

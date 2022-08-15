@@ -29,7 +29,7 @@ public class MaterialModel extends EntityAbstractClass {
     @OneToOne(targetEntity = RayonModel.class, cascade = CascadeType.ALL)
     @JoinColumn(name = "rayon_id")
     private RayonModel rayon;
-    @OneToMany(targetEntity = MaterialBarcodeModel.class, cascade = CascadeType.MERGE, mappedBy = "materialModel")
+    @OneToMany(targetEntity = MaterialBarcodeModel.class, cascade = CascadeType.ALL, mappedBy = "materialModel")
     private Collection<MaterialBarcodeModel>materialBarcodes;
 
     public MaterialModel(Integer createUserId,

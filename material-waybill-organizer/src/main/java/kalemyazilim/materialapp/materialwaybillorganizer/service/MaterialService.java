@@ -74,8 +74,15 @@ public class MaterialService {
 //            }
 //        }
 
+        for (MaterialBarcodeModel materialBarcode : materialModel.getMaterialBarcodes()) {
+            for(MaterialBarcodeModel updatedBarcode : updatedMaterialModel.getMaterialBarcodes() ){
+                if(materialBarcode.getUpdateUserId()==updatedBarcode.getUpdateUserId()){
+                    updatedBarcode.setCreateDate(materialBarcode.getCreateDate());
+                }
+            }
+            materialBarcodeRepo.delete(materialBarcode);
+        }
 
-        materialBarcodeRepo.deleteAll();
         materialModel.setMaterialBarcodes(updatedMaterialModel.getMaterialBarcodes());
         for (MaterialBarcodeModel materialBarcode : materialModel.getMaterialBarcodes()) {
             materialBarcode.setMaterialModel(materialModel);
